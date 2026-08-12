@@ -316,7 +316,80 @@
   window.addEventListener("resize", function () {
     var stats = renderStats();
     if (stats) renderChart(stats.byCategory);
+    renderWorldChart();
   });
 
+  // ---------- World page ----------
+
+  // Source: UNEP & WRAP, Food Waste Index Report 2024 (2022 data).
+  // Global total: 1.05 billion tonnes/year. Rate below is that annual
+  // figure spread evenly across the year for illustration — not a live feed.
+  var WORLD_KG_PER_YEAR = 1.05e12;
+  var WORLD_KG_PER_MS = WORLD_KG_PER_YEAR / (365 * 24 * 3600 * 1000);
+
+  var WORLD_SECTORS = [
+    { label: "Households", tonnes: 631, color: "#a8481a" },
+    { label: "Food service", tonnes: 290, color: "#d9a441" },
+    { label: "Retail", tonnes: 131, color: "#4c6b3f" }
+  ];
+
+  function initWorldCounter() {
+    var el = document.getElementById("worldCounter");
+    if (!el) return;
+    var start = Date.now();
+    function tick() {
+      var elapsedMs = Date.now() - start;
+      var kg = elapsedMs * WORLD_KG_PER_MS;
+      el.textContent = Math.round(kg).toLocaleString();
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function renderWorldChart() {
+    var canvas = document.getElementById("worldChart");
+    if (!canvas) return;
+
+    var dpr = window.devicePixelRatio || 1;
+    var cssWidth = canvas.parentElement.clientWidth - 48;
+    var rowHeight = 50;
+    var cssHeight = WORLD_SECTORS.length * rowHeight + 20;
+    canvas.style.width = cssWidth + "px";
+    canvas.style.height = cssHeight + "px";
+    canvas.width = cssWidth * dpr;
+    canvas.height = cssHeight * dpr;
+
+    var ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssWidth, cssHeight);
+
+    var max = Math.max.apply(null, WORLD_SECTORS.map(function (s) { return s.tonnes; }));
+    var labelWidth = 130;
+    var barAreaWidth = cssWidth - labelWidth - 90;
+
+    ctx.textBaseline = "middle";
+
+    WORLD_SECTORS.forEach(function (sector, i) {
+      var y = i * rowHeight + rowHeight / 2 + 10;
+      var barWidth = Math.max(4, (sector.tonnes / max) * barAreaWidth);
+
+      ctx.fillStyle = "#22301a";
+      ctx.font = "500 13px 'Work Sans', sans-serif";
+      ctx.textAlign = "right";
+      ctx.fillText(sector.label, labelWidth - 12, y);
+
+      ctx.fillStyle = sector.color;
+      roundRect(ctx, labelWidth, y - 12, barWidth, 24, 3);
+      ctx.fill();
+
+      ctx.fillStyle = "#22301a";
+      ctx.font = "600 12px 'Space Mono', monospace";
+      ctx.textAlign = "left";
+      ctx.fillText(sector.tonnes + "M t", labelWidth + barWidth + 10, y);
+    });
+  }
+
   renderAll();
+  initWorldCounter();
+  renderWorldChart();
 })();
