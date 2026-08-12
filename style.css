@@ -426,6 +426,89 @@ tbody tr:last-child td { border-bottom: none; }
 
 .tip-grid p { margin: 0; font-size: 0.9rem; opacity: 0.8; }
 
+/* ---------- World page ---------- */
+
+.world-counter-panel {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.world-counter {
+  background: var(--ink);
+  color: var(--paper-raised);
+  border-radius: 8px;
+  padding: clamp(28px, 5vw, 44px);
+  text-align: center;
+}
+
+.counter-eyebrow {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  opacity: 0.6;
+  margin: 0 0 12px;
+}
+
+.counter-num {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.6rem, 8vw, 4.6rem);
+  line-height: 1;
+  margin: 0;
+  color: var(--mustard);
+  font-variant-numeric: tabular-nums;
+}
+
+.counter-unit {
+  margin: 12px 0 0;
+  opacity: 0.8;
+  font-size: 0.95rem;
+}
+
+.stats-world { grid-template-columns: repeat(4, 1fr); }
+.stats-world .stat-label { line-height: 1.35; }
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.compare-card {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  padding: 24px;
+}
+
+.compare-num {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 2.1rem;
+  color: var(--rust);
+  margin-bottom: 8px;
+}
+
+.compare-card p { margin: 0; font-size: 0.9rem; opacity: 0.85; }
+
+.source-note {
+  max-width: 1180px;
+  margin: 0 auto 40px;
+  padding: 0 clamp(20px, 5vw, 64px);
+  font-size: 0.78rem;
+  opacity: 0.55;
+  font-style: italic;
+}
+
+@media (max-width: 860px) {
+  .stats-world { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .stats-world { grid-template-columns: 1fr; }
+}
+
 /* ---------- Footer ---------- */
 
 .site-footer {
